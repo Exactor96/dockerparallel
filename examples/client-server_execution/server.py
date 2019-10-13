@@ -6,12 +6,14 @@ from executor.executor import executor
 sock = socket.socket()
 
 sock.bind(('',1441))
-sock.listen(1)
+#sock.listen(1)
 
-conn, addr = sock.accept()
+#conn, addr = sock.accept()
 
 while True:
-    data = conn.recv(1024)
+    sock.listen(1)
+    conn, addr = sock.accept()
+    data = conn.recv(4096)
     if not data:
         break
     s = serializer()
@@ -19,6 +21,5 @@ while True:
     e = executor(**Dict)
     e.run()
 
-    conn.send(s.serialize(e.result))
-
+    conn.sendall(s.serialize(e.result))
 conn.close()

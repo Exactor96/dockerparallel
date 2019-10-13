@@ -9,10 +9,9 @@ def deco(func):
         s = serializer()
         snd={'func': func, 'globals': globals(), "locals": locals()}
         snd.get('locals').update({'sock': None})
-        print(snd)
         sock.sendall(s.serialize(snd))
-        data = sock.recv(1024)
-        sock.close()
+        data = sock.recv(4096)
+        #sock.close()
 
         print(s.deserialize(data))
     return wrap
@@ -30,3 +29,7 @@ if __name__ == '__main__':
          -13, -49, 63, -46, -84, 71, -76, -70, -79, 85, 28, -81, -35, -75, -73, 77, -70, 23, -87, -67, 100, 17, -24, 62,
          2, 37, 70]
     srt(l)
+    import random
+
+    for i in range(10):
+        srt([random.randint(-10**6,10**6) for j in range(random.randint(10,100))])
