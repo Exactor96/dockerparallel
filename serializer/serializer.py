@@ -1,11 +1,11 @@
-import dill
+import cloudpickle
 
 class serializer:
     def __init__(self):
         pass
 
     def serialize(self,obj):
-        return dill.dumps(obj)
+        return cloudpickle.dumps(obj)
 
     def deserialize(self,serialized):
-        return dill.loads(serialized)
+        return cloudpickle.loads(serialized)
