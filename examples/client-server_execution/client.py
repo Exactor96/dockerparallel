@@ -1,11 +1,10 @@
 import socket
 from serializer.serializer import serializer
 
-
 def deco(func):
     def wrap(*args,**kwargs):
         sock = socket.socket()
-        sock.connect(('localhost', 1441))
+        sock.connect(('dietpi', 1441))
         s = serializer()
         snd={'func': func, 'globals': globals(), "locals": locals()}
         snd.get('locals').update({'sock': None})
@@ -47,6 +46,14 @@ def db_test():
 def gen(n):
     for i in range(n):
         yield i
+
+import requests
+@deco
+def send_req(url):
+    r = requests.get(url)
+
+    return r.content
+
 if __name__ == '__main__':
     # l = [-96, -19, 64, -43, 81, -65, -77, -53, 57, -53, -65, 86, 77, 98, 99, -52, 42, -61, 93, -8, -84, -80, -68, 90,
     #      -10, -91, -69, 80, -73, -50, 70, -54, -68, 23, -84, -50, 75, -15, 15, 97, 33, 89, -60, 53, 47, 70, 96, 2, -64,
@@ -63,4 +70,5 @@ if __name__ == '__main__':
     #for i in range(1,111):
     #    colazz(i)
     #db_test()
-    gen(10)
+    #gen(10)
+    send_req('http://ident.me/')
