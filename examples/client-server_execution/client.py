@@ -1,10 +1,11 @@
 import socket
 from serializer.serializer import serializer
 
+
 def deco(func):
     def wrap(*args,**kwargs):
         sock = socket.socket()
-        sock.connect(('dietpi', 1441))
+        sock.connect(('localhost', 1441))
         s = serializer()
         snd={'func': func, 'globals': globals(), "locals": locals()}
         snd.get('locals').update({'sock': None})
@@ -53,6 +54,11 @@ def send_req(url):
     r = requests.get(url)
 
     return r.content
+
+
+
+
+
 
 if __name__ == '__main__':
     # l = [-96, -19, 64, -43, 81, -65, -77, -53, 57, -53, -65, 86, 77, 98, 99, -52, 42, -61, 93, -8, -84, -80, -68, 90,
