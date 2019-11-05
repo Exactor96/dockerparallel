@@ -5,7 +5,7 @@ from executor.executor import executor
 
 sock = socket.socket()
 
-sock.bind(('',1441))
+sock.bind(('',1442))
 #sock.listen(1)
 
 #conn, addr = sock.accept()

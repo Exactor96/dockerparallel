@@ -12,5 +12,5 @@ class T:
         self.a = a
 
     def run(self):
-        print(self.a)
+        return self.a
 
