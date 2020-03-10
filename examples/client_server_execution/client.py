@@ -1,19 +1,24 @@
+import os
+import sys
+
+sys.path.append(os.path.abspath('../../'))
+
 import socket
-from serializer.serializer import serializer
-from examples.client_server_execution.custom_module import T
+from core.serializer import serializer
+
 
 def deco(func):
-    def wrap(*args,**kwargs):
+    def wrap(*args, **kwargs):
         sock = socket.socket()
-        sock.connect(('dietpi', 1442))
+        sock.connect(('localhost', 1442))
         s = serializer()
-        snd={'func': func, 'globals': globals(), "locals": locals()}
+        snd = {'func': func, 'globals': globals(), "locals": locals()}
         snd.get('locals').update({'sock': None})
         sock.sendall(s.serialize(snd))
         data = sock.recv(4096)
         #sock.close()
 
-        print(s.deserialize(data))
+        return s.deserialize(data)
     return wrap
 
 
@@ -22,7 +27,7 @@ def srt(l):
     return sorted(l)
 
 @deco
-def colazz(num):
+def colatz(num):
     res = []
     if num == 1:
         return [1,]
@@ -48,18 +53,40 @@ def gen(n):
     for i in range(n):
         yield i
 
-import requests
-@deco
-def send_req(url):
-    r = requests.get(url)
 
-    return r.content
+import requests
+
+
+@deco
+def count_response_size(url):
+    r = requests.get(url)
+    return r.content.__sizeof__()
+
+
 @deco
 def work_with_custom_module(Class):
     c = Class('123')
     c.run()
 
 
-t = T('asd')
-work_with_custom_module(T)
-
+if __name__ == '__main__':
+    # Sorting
+    import time
+    from random import randint
+    print('Unsorted List')
+    unsorted_list = [randint(-10 ** 9, 10 ** 9) for i in range(15)]
+    print(unsorted_list)
+    print('Sorted List')
+    print(srt(unsorted_list))
+    print('\n'*3)
+    time.sleep(3)
+    # collatz function
+    print('Collatz Function for 1337')
+    print('is', colatz(1337))
+    time.sleep(3)
+    print('\n' * 3)
+    print('Count response size')
+    print('ya.ru', count_response_size('http://ya.ru/'), 'bytes')
+    print('google.com', count_response_size('http://google.com/'), 'bytes')
+    print('vk.com', count_response_size('http://vk.com/'), 'bytes')
+    print('facebook.com', count_response_size('http://facebook.com/'), 'bytes')

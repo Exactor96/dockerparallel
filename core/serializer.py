@@ -4,8 +4,10 @@ class serializer:
     def __init__(self):
         pass
 
-    def serialize(self,obj):
+    @staticmethod
+    def serialize(obj):
         return cloudpickle.dumps(obj)
 
-    def deserialize(self,serialized):
+    @staticmethod
+    def deserialize(serialized):
         return cloudpickle.loads(serialized)
